@@ -1,0 +1,45 @@
+- name: "Create Locations"
+  connection: local
+  hosts: localhost
+  gather_facts: False
+
+  tasks:
+    - name: Create location representing Row 3 Pod B
+      netbox.netbox.netbox_location:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: Row 3 Pod B
+          site: MGHPCC
+          description: Also known as kaizen (NEU cages)
+        state: present
+
+    - name: Create location representing Row 4 Pod A
+      netbox.netbox.netbox_location:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: Row 4 Pod A
+          site: MGHPCC
+          description: Includes Kumo and engage1 (BU cages)
+        state: present
+
+    - name: Create location representing Row 6 Pod B
+      netbox.netbox.netbox_location:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: Row 6 Pod B
+          site: MGHPCC
+          description: OCT/Cloudlab
+        state: present
+
+    - name: Create location representing Row 1 Pod C
+      netbox.netbox.netbox_location:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: Row 1 Pod C
+          site: MGHPCC
+          description: OCT/Cloudlab
+        state: present
