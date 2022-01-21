@@ -1,0 +1,39 @@
+- name: "Create racks/cages"
+  connection: local
+  hosts: localhost
+  gather_facts: False
+
+# Default rack height in netbox is 42, while MGHPCC racks are 44U tall.
+  tasks:
+    - name: create MOC cages in NEU
+      netbox.netbox.netbox_rack:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "{{ item }}"
+          site: MGHPCC
+          location: Row 3 Pod B
+          u_height: 44
+        state: present
+      loop:
+        - NEU Cage 3
+        - NEU Cage 5
+        - NEU Cage 15
+        - NEU Cage 17
+        - NEU Cage 19
+
+    - name: create MOC cages in BU
+      netbox.netbox.netbox_rack:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "{{ item }}"
+          site: MGHPCC
+          location: Row 4 Pod A
+          u_height: 44
+        state: present
+      loop:
+        - BU Cage 2
+        - BU Cage 4
+        - BU Cage 21
+        - BU Cage 23
