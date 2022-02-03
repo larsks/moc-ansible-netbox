@@ -1,0 +1,53 @@
+- name: "Gather required information"
+  hosts: all
+  tasks:
+
+    - name: "Get manufacturer"
+      command: dmidecode --string system-manufacturer
+      register: manufacturer
+
+    - name: "Get Serial Number"
+      command: dmidecode --string system-serial-number
+      register: serial
+
+    - name: "Get product type"
+      command: dmidecode --string system-product-name
+      register: product
+
+    - name: "Get system UUID"
+      command: dmidecode --string system-uuid
+      register: uuid
+
+    - name: "Create the manufacturer"
+      ignore_errors: True
+      netbox.netbox.netbox_manufacturer:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "{{ manufacturer.stdout }}"
+        state: present
+      delegate_to: 127.0.0.1
+
+    - name: "Create the device_type"
+      ignore_errors: True
+      netbox.netbox.netbox_device_type:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          manufacturer: "{{ manufacturer.stdout }}"
+          model: "{{ product.stdout }}"
+          u_height: 1
+        state: present
+      delegate_to: 127.0.0.1
+
+    - name: "Register the system in netbox"
+      netbox.netbox.netbox_device:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "{{ serial.stdout }}"
+          device_type: "{{ product.stdout }}"
+          device_role: test-role
+          site: MGHPCC
+        state: present
+      delegate_to: 127.0.0.1
