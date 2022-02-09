@@ -1,0 +1,8 @@
+all:
+  hosts:
+    kzn-mon1:
+      ansible_host: 172.16.19.14
+      ansible_user: root
+    kzn-mon2:
+      ansible_host: 172.16.17.14
+      ansible_user: root
