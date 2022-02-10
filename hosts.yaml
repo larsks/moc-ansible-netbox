@@ -6,3 +6,9 @@ all:
     kzn-mon2:
       ansible_host: 172.16.17.14
       ansible_user: root
+    kzn-mon3:
+      ansible_host: 172.16.5.14
+      ansible_user: root
+    kzn-osd07:
+      ansible_host: 172.16.5.15
+      ansible_user: root

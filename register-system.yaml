@@ -2,6 +2,16 @@
   hosts: all
   tasks:
 
+    - name: "Install dmidecode and ipmitool"
+      yum:
+        name: "{{ packages }}"
+        state: latest
+        update_cache: true
+      vars:
+        packages:
+          - dmidecode
+          - ipmitool
+
     - name: "Get manufacturer"
       command: dmidecode --string system-manufacturer
       register: manufacturer
