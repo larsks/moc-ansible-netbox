@@ -32,6 +32,10 @@
       shell: dmidecode --type chassis |grep Height | cut -d ' ' -f 2
       register: chassis_height
 
+    - name: "Get IPMI Interface's mac address"
+      shell: ipmitool lan print |grep "MAC Address" | awk '{print $4}'
+      register: ipmi_mac_addr
+
     - name: "Get IPMI address"
       shell: ipmitool lan print |grep "IP Address" | grep -v Source | cut -d ':' -f 2
       register: ipmi_addr
@@ -67,6 +71,7 @@
       delegate_to: 127.0.0.1
 
     - name: "Register the system in netbox"
+      ignore_errors: True
       netbox.netbox.netbox_device:
         netbox_url: "{{ netbox_url }}"
         netbox_token: "{{ netbox_token }}"
@@ -83,3 +88,29 @@
           site: MGHPCC
         state: present
       delegate_to: 127.0.0.1
+
+    - name: "Create IPMI interface for registered device"
+      netbox.netbox.netbox_device_interface:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          device: "{{ inventory_hostname }}"
+          name: IPMI Interface
+          mac_address: "{{ ipmi_mac_addr.stdout }}"
+          type: 1000Base-t (1GE)
+          mgmt_only: true
+        state: present
+      delegate_to: 127.0.0.1
+
+    - name: "Associate IPMI address with IPMI interface"
+      netbox_ip_address:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          address: "{{ ipmi_addr.stdout }}"
+          assigned_object:
+            name: IPMI Interface
+            device: "{{ inventory_hostname }}"
+        state: present
+      delegate_to: 127.0.0.1
+
