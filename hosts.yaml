@@ -1,14 +1,20 @@
 all:
-  hosts:
-    kzn-mon1:
-      ansible_host: 172.16.19.14
-      ansible_user: root
-    kzn-mon2:
-      ansible_host: 172.16.17.14
-      ansible_user: root
-    kzn-mon3:
-      ansible_host: 172.16.5.14
-      ansible_user: root
-    kzn-osd07:
-      ansible_host: 172.16.5.15
-      ansible_user: root
+  children:
+    production_ceph:
+      hosts:
+        kzn-mon1:
+          ansible_host: 172.16.19.14
+        kzn-mon2:
+          ansible_host: 172.16.17.14
+        kzn-mon3:
+          ansible_host: 172.16.5.14
+        kzn-osd07:
+          ansible_host: 172.16.5.15
+      vars:
+        ansible_user: root
+    openstack_computes:
+      hosts:
+        neu-3-35:
+          ansible_host: 172.16.3.35
+      vars:
+        ansible_user: root
