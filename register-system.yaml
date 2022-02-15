@@ -1,5 +1,5 @@
 - name: "Gather required information"
-  hosts: all
+  hosts: servers
   tasks:
 
     - name: "Install dmidecode and ipmitool"
@@ -121,3 +121,37 @@
             device: "{{ inventory_hostname }}"
         state: present
       delegate_to: 127.0.0.1
+
+    - name: "Create network interfaces"
+      netbox.netbox.netbox_device_interface:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          device: "{{ inventory_hostname }}"
+          name: "{{ item }}"
+          mac_address: "{{ interface.macaddress|default('unknown') }}"
+          type: 10GBase-t (10GE)
+        state: present
+      vars:
+        interface: >-
+          {{ hostvars[inventory_hostname]["ansible_{}".format(item.replace('-', '_'))] }}
+      delegate_to: 127.0.0.1
+      loop: "{{ ansible_interfaces }}"
+      when: interface.type == "ether" and interface.ipv4.address is defined
+
+    - name: "Associate IP addresses with network interfaces"
+      netbox_ip_address:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          address: "{{ interface.ipv4.address }}"
+          assigned_object:
+            name: "{{ item }}"
+            device: "{{ inventory_hostname }}"
+        state: present
+      vars:
+        interface: >-
+          {{ hostvars[inventory_hostname]["ansible_{}".format(item.replace('-', '_'))] }}
+      delegate_to: 127.0.0.1
+      loop: "{{ ansible_interfaces }}"
+      when: interface.type == "ether" and interface.ipv4.address is defined

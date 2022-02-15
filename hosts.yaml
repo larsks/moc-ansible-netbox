@@ -1,20 +1,30 @@
 all:
   children:
-    production_ceph:
+    servers:
+      children:
+        production_ceph:
+          hosts:
+            kzn-mon1:
+              ansible_host: 172.16.19.14
+            kzn-mon2:
+              ansible_host: 172.16.17.14
+            kzn-mon3:
+              ansible_host: 172.16.5.14
+            kzn-osd07:
+              ansible_host: 172.16.5.15
+          vars:
+            ansible_user: root
+        openstack_computes:
+          hosts:
+            neu-3-35:
+              ansible_host: 172.16.3.35
+          vars:
+            ansible_user: root
+    switches:
       hosts:
-        kzn-mon1:
-          ansible_host: 172.16.19.14
-        kzn-mon2:
-          ansible_host: 172.16.17.14
-        kzn-mon3:
-          ansible_host: 172.16.5.14
-        kzn-osd07:
-          ansible_host: 172.16.5.15
-      vars:
-        ansible_user: root
-    openstack_computes:
-      hosts:
-        neu-3-35:
-          ansible_host: 172.16.3.35
-      vars:
-        ansible_user: root
+        brocade-3-43:
+          ansible_host: 10.0.3.43
+          ansible_user: admin
+        cisco-19-41:
+          ansible_host: 10.0.19.42
+          ansible_user: admin
