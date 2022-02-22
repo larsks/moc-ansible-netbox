@@ -111,7 +111,7 @@
       delegate_to: 127.0.0.1
 
     - name: "Associate IPMI address with IPMI interface"
-      netbox_ip_address:
+      netbox.netbox.netbox_ip_address:
         netbox_url: "{{ netbox_url }}"
         netbox_token: "{{ netbox_token }}"
         data:
@@ -140,7 +140,7 @@
       when: interface.type == "ether" and interface.ipv4.address is defined
 
     - name: "Associate IP addresses with network interfaces"
-      netbox_ip_address:
+      netbox.netbox.netbox_ip_address:
         netbox_url: "{{ netbox_url }}"
         netbox_token: "{{ netbox_token }}"
         data:
