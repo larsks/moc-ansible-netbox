@@ -1,0 +1,11 @@
+netbox_manufacturers:
+  - Brocade
+  - Cisco
+  - Dell
+  - IBM
+  - Generic
+  - Intel
+  - Lenovo
+  - Mellanox
+  - Quanta
+  - Supermicro

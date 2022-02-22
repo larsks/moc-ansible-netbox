@@ -18,3 +18,12 @@
       description: "{{ item.description|default(omit) }}"
     state: present
   loop: "{{ netbox_locations }}"
+
+- name: Create manufacturers
+  netbox.netbox.netbox_manufacturer:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    data:
+      name: "{{ item }}"
+    state: present
+  loop: "{{ netbox_manufacturers }}"
