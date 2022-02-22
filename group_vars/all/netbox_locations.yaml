@@ -1,0 +1,13 @@
+netbox_locations:
+  - name: Row 3 Pod B
+    site: MGHPCC
+    description: Also known as kaizen (NEU cages)
+  - name: Row 4 Pod A
+    site: MGHPCC
+    description: Includes Kumo and engage1 (BU cages)
+  - name: Row 6 Pod B
+    site: MGHPCC
+    description: OCT/Cloudlab
+  - name: Row 1 Pod C
+    site: MGHPCC
+    description: OCT/Cloudlab
