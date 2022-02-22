@@ -1,9 +1,9 @@
 - name: "Create racks/cages"
   connection: local
   hosts: localhost
-  gather_facts: False
+  gather_facts: false
 
-# Default rack height in netbox is 42, while MGHPCC racks are 44U tall.
+  # Default rack height in netbox is 42, while MGHPCC racks are 44U tall.
   tasks:
     - name: create MOC cages in NEU
       netbox.netbox.netbox_rack:
