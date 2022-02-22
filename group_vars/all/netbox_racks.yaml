@@ -1,0 +1,34 @@
+netbox_racks:
+  - name: row3/podB/cage3
+    site: MGHPCC
+    location: Row 3 Pod B
+    u_height: 44
+  - name: row3/podB/cage15
+    site: MGHPCC
+    location: Row 3 Pod B
+    u_height: 44
+  - name: row3/podB/cage17
+    site: MGHPCC
+    location: Row 3 Pod B
+    u_height: 44
+  - name: row3/podB/cage19
+    site: MGHPCC
+    location: Row 3 Pod B
+    u_height: 44
+
+  - name: row4/podA/cage2
+    site: MGHPCC
+    location: Row 4 Pod A
+    u_height: 44
+  - name: row4/podA/cage4
+    site: MGHPCC
+    location: Row 4 Pod A
+    u_height: 44
+  - name: row4/podA/cage21
+    site: MGHPCC
+    location: Row 4 Pod A
+    u_height: 44
+  - name: row4/podA/cage23
+    site: MGHPCC
+    location: Row 4 Pod A
+    u_height: 44
