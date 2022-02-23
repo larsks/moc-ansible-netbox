@@ -1,0 +1,46 @@
+- name: Create sites
+  netbox.netbox.netbox_site:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    data:
+      name: "{{ item.name }}"
+      description: "{{ item.description|default(omit) }}"
+    state: present
+  loop: "{{ netbox_sites }}"
+
+- name: Create locations
+  netbox.netbox.netbox_location:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    data:
+      name: "{{ item.name }}"
+      site: "{{ item.site }}"
+      description: "{{ item.description|default(omit) }}"
+    state: present
+  loop: "{{ netbox_locations }}"
+
+- name: Create racks
+  netbox.netbox.netbox_rack:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    data:
+      name: "{{ item.1.name }}"
+      site: "{{ item.0.site }}"
+      location: "{{ item.0.location }}"
+
+      # This lets you provide a per-rack u_height, defaulting to the
+      # value provided on the rack group.
+      u_height: "{{ item.1.u_height|default(item.0.u_height) }}"
+    state: present
+  loop: "{{ netbox_racks|subelements('racks') }}"
+  loop_control:
+    label: "{{ item.1.name }}"
+
+- name: Create manufacturers
+  netbox.netbox.netbox_manufacturer:
+    netbox_url: "{{ netbox_url }}"
+    netbox_token: "{{ netbox_token }}"
+    data:
+      name: "{{ item }}"
+    state: present
+  loop: "{{ netbox_manufacturers }}"
