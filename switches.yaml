@@ -35,7 +35,7 @@
           name: "{{ inventory_hostname }} "
           serial: "{{ ansible_net_serialnum }}"
           device_type: "{{ ansible_net_model }}"
-          rack: "{{ 'NEU Cage ' + rack }}"
+          rack: "{{ 'row3/podB/cage' + rack }}"
           position: "{{rackpos}}"
           device_role: test-role
           face: front

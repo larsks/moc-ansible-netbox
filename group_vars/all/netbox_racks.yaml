@@ -4,6 +4,7 @@ netbox_racks:
     u_height: 44
     racks:
       - name: row3/podB/cage3
+      - name: row3/podB/cage5
       - name: row3/podB/cage15
       - name: row3/podB/cage17
       - name: row3/podB/cage19
