@@ -88,7 +88,7 @@
           name: "{{ inventory_hostname }} "
           serial: "{{ (serial.stdout == '.....') | ternary(uuid.stdout, serial.stdout) }}"
           device_type: "{{ product.stdout }}"
-          rack: "{{ 'NEU Cage ' + rack }}"
+          rack: "{{ 'row3/podB/cage' + rack }}"
           position: "{{rackpos}}"
           device_role: "{{ group_names[0] }}"
           face: front
