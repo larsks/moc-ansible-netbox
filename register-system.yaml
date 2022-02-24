@@ -44,6 +44,19 @@
       command: find /sys/class/net -type l -not -lname '*virtual*' -printf '%f\n'
       register: physical_interfaces
 
+    - name: "Create a dictionary mapping interface speeds and module name with netbox names"
+      set_fact:
+        speed_map: {
+          '-1': '1000Base-t (1GE)',
+          '1000': '1000Base-t (1GE)',
+          '10000': '10GBase-t (10GE)'
+        }
+        module_map: {
+          'ixgbe': '10GBase-t (10GE)',
+          'tg3': '1000Base-t (1GE)',
+          'sfc': '10GBase-t (10GE)'
+        }
+
     - name: "Calcuate rack and rackpos"
       set_fact:
         rack: "{{ parsed_address[-2] }}"
@@ -134,7 +147,8 @@
           device: "{{ inventory_hostname }}"
           name: "{{ item }}"
           mac_address: "{{ interface.macaddress|default('unknown') }}"
-          type: 10GBase-t (10GE)
+          type: >-
+            {{ speed_map[interface.speed|string] if interface.speed is defined else module_map[interface.module] | default('Other') }}
         state: present
       vars:
         interface: >-
