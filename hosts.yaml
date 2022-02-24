@@ -41,5 +41,5 @@ all:
               ansible_user: admin
               ansible_password: null
               ansible_network_os: cisco.nxos.nxos
-    vars:
-      ansible_connection: ansible.netcommon.network_cli
+      vars:
+        ansible_connection: ansible.netcommon.network_cli
