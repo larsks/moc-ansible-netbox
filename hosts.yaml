@@ -22,11 +22,11 @@ all:
             ansible_user: root
     switches:
       hosts:
-        # brocade-3-43:
-        #   ansible_host: 10.0.3.43
-        #   ansible_user: admin
-        #   ansible_network_os: nos
-        #   ansible_password: null
+        brocade-3-43:
+          ansible_host: 10.0.3.43
+          ansible_user: admin
+          ansible_network_os: nos
+          ansible_password: null
         cisco-19-42:
           ansible_host: 10.0.19.42
           ansible_user: admin
