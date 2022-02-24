@@ -1,1 +1,2 @@
 group_vars/all/netbox_creds.yaml
+group_vars/all/switch_creds.yaml
