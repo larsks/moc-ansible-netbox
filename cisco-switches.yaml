@@ -1,11 +1,10 @@
 - name: "Gather required information"
-  hosts: switches
+  hosts: cisco
   tasks:
 
     - name: "Get facts about cisco switches"
       cisco.nxos.nxos_facts:
         gather_subset: all
-      when: ansible_network_os == 'cisco.nxos.nxos'
 
     - name: "Calcuate rack and rackpos"
       set_fact:
@@ -24,7 +23,6 @@
           model: "{{ ansible_net_model }}"
         state: present
       delegate_to: 127.0.0.1
-      when: ansible_network_os == 'cisco.nxos.nxos'
 
     - name: "Register the device in netbox"
       ignore_errors: true
