@@ -26,20 +26,32 @@ all:
           hosts:
             brocade-3-43:
               ansible_host: 10.0.3.43
-              ansible_user: admin
-              ansible_network_os: nos
-              ansible_password: null
+            brocade-3-42:
+              ansible_host: 10.0.3.42
+            brocade-5-43:
+              ansible_host: 10.0.5.43
+            brocade-5-42:
+              ansible_host: 10.0.5.42
+            brocade-15-43:
+              ansible_host: 10.0.15.43
+            brocade-15-42:
+              ansible_host: 10.0.15.42
+            brocade-17-43:
+              ansible_host: 10.0.17.43
+            brocade-19-43:
+              ansible_host: 10.0.19.43
+          vars:
+            ansible_network_os: nos
+            ansible_password: "{{ moc_brocade_password }}"
         cisco:
           hosts:
             cisco-19-42:
               ansible_host: 10.0.19.42
-              ansible_user: admin
-              ansible_password: null
-              ansible_network_os: cisco.nxos.nxos
             cisco-17-42:
               ansible_host: 10.0.17.42
-              ansible_user: admin
-              ansible_password: null
-              ansible_network_os: cisco.nxos.nxos
+          vars:
+            ansible_password: "{{ moc_cisco_password }}"
+            ansible_network_os: cisco.nxos.nxos
       vars:
+        ansible_user: admin
         ansible_connection: ansible.netcommon.network_cli
