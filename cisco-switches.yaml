@@ -30,12 +30,12 @@
         netbox_url: "{{ netbox_url }}"
         netbox_token: "{{ netbox_token }}"
         data:
-          name: "{{ inventory_hostname }} "
+          name: "{{ ansible_net_hostname }} "
           serial: "{{ ansible_net_serialnum }}"
           device_type: "{{ ansible_net_model }}"
           rack: "{{ 'row3/podB/cage' + rack }}"
           position: "{{rackpos}}"
-          device_role: test-role
+          device_role: data_switch
           face: front
           location: Row 3 Pod B
           site: MGHPCC
@@ -48,7 +48,7 @@
         netbox_token: "{{ netbox_token }}"
         data:
           name: "{{ item }}"
-          device: "{{ inventory_hostname }}"
+          device: "{{ ansible_net_hostname }}"
           mac_address: "{{ interface.macaddress }}"
           description: "{{ interface.description }}"
           mode: "{{ (interface.mode == 'trunk') | ternary('Tagged', 'Access') }}"
@@ -67,7 +67,7 @@
         netbox_token: "{{ netbox_token }}"
         data:
           name: "{{ item }}"
-          device: "{{ inventory_hostname }}"
+          device: "{{ ansible_net_hostname }}"
           mac_address: "{{ interface.macaddress }}"
           description: "{{ interface.description }}"
           mode: "{{ (interface.mode == 'trunk') | ternary('Tagged', 'Access') }}"
@@ -86,7 +86,7 @@
         netbox_token: "{{ netbox_token }}"
         data:
           name: "{{ item }}"
-          device: "{{ inventory_hostname }}"
+          device: "{{ ansible_net_hostname }}"
           mac_address: "{{ interface.macaddress }}"
           description: "{{ interface.description }}"
           mode: "{{ (interface.mode == 'trunk') | ternary('Tagged', 'Access') }}"
