@@ -18,7 +18,7 @@
       register: hostname_stdout
       vars:
         ansible_command_timeout: 90
-        rbridge_id: "{{ rbridge_stdout.stdout[0].split(':')[1] }}"
+        rbridge_id: "{{ rbridge_stdout.stdout[0].split(':')[1]|trim }}"
         # need to extract the id from an output like this
         # "stdout": ["Rbridge-id: 4"]
 
@@ -45,12 +45,12 @@
       vars:
         parsed_address: "{{ ansible_host | split('.') }}"
 
-    - name: "Set hostname"
+    - name: "Set hostname and other vars"
       set_fact:
-        brocade_hostname: "{{ hostname_stdout.stdout[0].split(' ')[2] }} "
-        brocade_serial: "{{ serial_stdout.stdout[0].split(':')[1] }}"
-        brocade_model: "{{ chassis_stdout.stdout[0].split(':')[1] }}"
-        rbridge_id: "{{ rbridge_stdout.stdout[0].split(':')[1] }}"
+        brocade_hostname: "{{ hostname_stdout.stdout[0].split(' ')[2] | trim }}"
+        brocade_serial: "{{ serial_stdout.stdout[0].split(':')[1] | trim }}"
+        brocade_model: "{{ chassis_stdout.stdout[0].split(':')[1] | trim }}"
+        rbridge_id: "{{ rbridge_stdout.stdout[0].split(':')[1] | trim }}"
 
     - name: "Create the device_type"
       netbox.netbox.netbox_device_type:
@@ -67,12 +67,12 @@
         netbox_url: "{{ netbox_url }}"
         netbox_token: "{{ netbox_token }}"
         data:
-          name: "{{ brocade_hostname |trim}}"
+          name: "{{ brocade_hostname }}"
           serial: "{{ brocade_serial }}"
           device_type: "{{ brocade_model }}"
           rack: "{{ 'row3/podB/cage' + rack }}"
           position: "{{rackpos}}"
-          device_role: network-switch
+          device_role: data_switch
           face: front
           location: Row 3 Pod B
           site: MGHPCC
@@ -86,7 +86,7 @@
         data:
           name: >-
             TenGigabitEthernet {{rbridge_id}}/0/{{item}}
-          device: "{{ brocade_hostname |trim}}"
+          device: "{{ brocade_hostname }}"
           type: SFP+ (10GE)
         state: present
       delegate_to: 127.0.0.1
@@ -99,7 +99,7 @@
         data:
           name: >-
             FortyGigabitEthernet {{rbridge_id}}/0/{{item}}
-          device: "{{ brocade_hostname |trim}}"
+          device: "{{ brocade_hostname }}"
           type: QSFP+ (40GE)
         state: present
       delegate_to: 127.0.0.1
