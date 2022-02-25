@@ -40,6 +40,23 @@
       shell: ipmitool lan print |grep "IP Address" | grep -v Source | cut -d ':' -f 2
       register: ipmi_addr
 
+    - name: "Get physical network interfaces"
+      command: find /sys/class/net -type l -not -lname '*virtual*' -printf '%f\n'
+      register: physical_interfaces
+
+    - name: "Create a dictionary mapping interface speeds and module name with netbox names"
+      set_fact:
+        speed_map: {
+          '-1': '1000Base-t (1GE)',
+          '1000': '1000Base-t (1GE)',
+          '10000': '10GBase-t (10GE)'
+        }
+        module_map: {
+          'ixgbe': '10GBase-t (10GE)',
+          'tg3': '1000Base-t (1GE)',
+          'sfc': '10GBase-t (10GE)'
+        }
+
     - name: "Calcuate rack and rackpos"
       set_fact:
         rack: "{{ parsed_address[-2] }}"
@@ -122,7 +139,7 @@
         state: present
       delegate_to: 127.0.0.1
 
-    - name: "Create network interfaces"
+    - name: "Create physical network interfaces"
       netbox.netbox.netbox_device_interface:
         netbox_url: "{{ netbox_url }}"
         netbox_token: "{{ netbox_token }}"
@@ -130,13 +147,30 @@
           device: "{{ inventory_hostname }}"
           name: "{{ item }}"
           mac_address: "{{ interface.macaddress|default('unknown') }}"
-          type: 10GBase-t (10GE)
+          type: >-
+            {{ speed_map[interface.speed|string] if interface.speed is defined else module_map[interface.module] | default('Other') }}
         state: present
       vars:
         interface: >-
           {{ hostvars[inventory_hostname]["ansible_{}".format(item.replace('-', '_'))] }}
       delegate_to: 127.0.0.1
-      loop: "{{ ansible_interfaces }}"
+      loop: "{{ physical_interfaces.stdout_lines }}"
+
+    - name: "Create virtual network interfaces that have an IP"
+      netbox.netbox.netbox_device_interface:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          device: "{{ inventory_hostname }}"
+          name: "{{ item }}"
+          mac_address: "{{ interface.macaddress|default('unknown') }}"
+          type: virtual
+        state: present
+      vars:
+        interface: >-
+          {{ hostvars[inventory_hostname]["ansible_{}".format(item.replace('-', '_'))] }}
+      delegate_to: 127.0.0.1
+      loop: "{{ansible_interfaces | difference(physical_interfaces.stdout_lines)}}"
       when: interface.type == "ether" and interface.ipv4.address is defined
 
     - name: "Associate IP addresses with network interfaces"
