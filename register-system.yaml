@@ -17,6 +17,7 @@
       ansible.builtin.systemd:
         name: lldpad
         state: started
+        enabled: true
 
     - name: "Get physical network interfaces"
       command: find /sys/class/net -type l -not -lname '*virtual*' -printf '%f\n'
@@ -218,12 +219,17 @@
       loop: "{{ port_ids.results }}"
       register: sysnames
 
-    - set_fact:
-        triplets: "{{ triplets + [[item.item.item, item.item.stdout, item.stdout.split('\t')[1] ]] }}"
+    - name: "Create list containing NIC, switchport and switch hostname"
+      set_fact:
+        connections: "{{ connections + [[nic, switchport, switch]] }}"
       when: item.rc == 0
       loop: "{{ sysnames.results }}"
       vars:
-        triplets: []
+        connections: []
+        nic: "{{ item.item.item }}"
+        # Cisco switchports are registersted like "Ethernet X/Y" but lldp data has it as Eth X/Y
+        switchport: "{{item.item.stdout.replace('Eth', 'Ethernet') if 'Ethernet' not in item.item.stdout else item.item.stdout }}"
+        switch: "{{item.stdout.split('\t')[1]}}"
 
     - name: "Create cables that connect NIC to switchports"
       netbox.netbox.netbox_cable:
@@ -237,7 +243,6 @@
           termination_b_type: dcim.interface
           termination_b:
             device: "{{ item[2] }}"
-            # Cisco switchports are registersted like "Ethernet X/Y" but lldp data has it as Eth X/Y
-            name: "{{ item[1].replace('Eth', 'Ethernet') if 'Ethernet' not in item[1] else item[1]}}"
+            name: "{{ item[1] }}"
       delegate_to: 127.0.0.1
-      loop: "{{ triplets }}"
+      loop: "{{ connections }}"
