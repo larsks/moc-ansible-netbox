@@ -1,4 +1,4 @@
-- name: "Gather required information"
+- name: "Register system into netbox"
   hosts: servers
   tasks:
 
@@ -11,6 +11,21 @@
         packages:
           - dmidecode
           - ipmitool
+          - lldpad
+
+    - name: "Start lldpad service"
+      ansible.builtin.systemd:
+        name: lldpad
+        state: started
+        enabled: true
+
+    - name: "Get physical network interfaces"
+      command: find /sys/class/net -type l -not -lname '*virtual*' -printf '%f\n'
+      register: physical_interfaces
+
+    - name: "Set interfaces to start collecting lldp information"
+      command: lldptool -i {{ item }} set-lldp adminstatus=rx
+      loop: "{{ physical_interfaces.stdout_lines }}"
 
     - name: "Get manufacturer"
       command: dmidecode --string system-manufacturer
@@ -39,10 +54,6 @@
     - name: "Get IPMI address"
       shell: ipmitool lan print |grep "IP Address" | grep -v Source | cut -d ':' -f 2
       register: ipmi_addr
-
-    - name: "Get physical network interfaces"
-      command: find /sys/class/net -type l -not -lname '*virtual*' -printf '%f\n'
-      register: physical_interfaces
 
     - name: "Create a dictionary mapping interface speeds and module name with netbox names"
       set_fact:
@@ -189,3 +200,49 @@
       delegate_to: 127.0.0.1
       loop: "{{ ansible_interfaces }}"
       when: interface.type == "ether" and interface.ipv4.address is defined
+
+    - name: "Pause for some time so that lldptool has enough time to capture necessary information"
+      pause:
+        minutes: 5
+
+    - name: "Get switchport name that's connected to NIC"
+      shell: >-
+        lldptool -i {{ item }} get-tlv -n -V portID | awk -F": " '/Ifname|Local/ {print $2}'
+      failed_when: false
+      loop: "{{ physical_interfaces.stdout_lines }}"
+      register: port_ids
+
+    - name: "Get hostname of the switch that a NIC is connected to"
+      shell: >-
+        lldptool -i {{ item.item }} get-tlv -n -V sysName
+      failed_when: false
+      loop: "{{ port_ids.results }}"
+      register: sysnames
+
+    - name: "Create list containing NIC, switchport and switch hostname"
+      set_fact:
+        connections: "{{ connections + [[nic, switchport, switch]] }}"
+      when: item.rc == 0
+      loop: "{{ sysnames.results }}"
+      vars:
+        connections: []
+        nic: "{{ item.item.item }}"
+        # Cisco switchports are registersted like "Ethernet X/Y" but lldp data has it as Eth X/Y
+        switchport: "{{item.item.stdout.replace('Eth', 'Ethernet') if 'Ethernet' not in item.item.stdout else item.item.stdout }}"
+        switch: "{{item.stdout.split('\t')[1]}}"
+
+    - name: "Create cables that connect NIC to switchports"
+      netbox.netbox.netbox_cable:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          termination_a_type: dcim.interface
+          termination_a:
+            device: "{{ inventory_hostname }}"
+            name: "{{ item[0] }}"
+          termination_b_type: dcim.interface
+          termination_b:
+            device: "{{ item[2] }}"
+            name: "{{ item[1] }}"
+      delegate_to: 127.0.0.1
+      loop: "{{ connections }}"
