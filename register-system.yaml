@@ -52,7 +52,8 @@
       register: ipmi_mac_addr
 
     - name: "Get IPMI address"
-      shell: ipmitool lan print |grep "IP Address" | grep -v Source | cut -d ':' -f 2
+      shell: >-
+        ipmitool lan print | awk -F' *: *' '$1 == "IP Address" {print $2}'
       register: ipmi_addr
 
     - name: "Create a dictionary mapping interface speeds and module name with netbox names"
