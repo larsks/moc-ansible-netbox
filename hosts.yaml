@@ -55,3 +55,19 @@ all:
       vars:
         ansible_user: admin
         ansible_connection: ansible.netcommon.network_cli
+    ipmi_switches:
+      children:
+        brocade_icx:
+          hosts:
+            ipmi-cage3:
+              ansible_host: 10.0.3.44
+            ipmi-cage5:
+              ansible_host: 10.0.5.44
+            ipmi-cage15:
+              ansible_host: 10.0.15.44
+            ipmi-cage17:
+              ansible_host: 10.0.17.44
+        ibm:
+          hosts:
+            ipmi-cage19:
+              ansible_host: 10.0.19.44
