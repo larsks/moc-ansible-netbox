@@ -247,3 +247,18 @@
             name: "{{ item[1] }}"
       delegate_to: 127.0.0.1
       loop: "{{ connections }}"
+
+    - name: "Create cable for IPMI interface"
+      netbox.netbox.netbox_cable:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          termination_a_type: dcim.interface
+          termination_a:
+            device: "{{ inventory_hostname }}"
+            name: IPMI Interface
+          termination_b_type: dcim.interface
+          termination_b:
+            device: ipmi-cage{{ rack }}
+            name: GigabitEthernet 1/1/{{ rackpos }}
+      delegate_to: 127.0.0.1
