@@ -2,6 +2,13 @@ all:
   children:
     servers:
       children:
+        ovirt:
+          hosts:
+            ov1.massopen.cloud:
+            ov2.massopen.cloud:
+            ov3.massopen.cloud:
+          vars:
+            ansible_user: root
         production_ceph:
           hosts:
             kzn-mon1:
@@ -10,14 +17,96 @@ all:
               ansible_host: 172.16.17.14
             kzn-mon3:
               ansible_host: 172.16.5.14
+            kzn-osd05:
+              ansible_host: 172.16.19.15
+            kzn-osd06:
+              ansible_host: 172.16.17.15
             kzn-osd07:
               ansible_host: 172.16.5.15
+            kzn-osd08:
+              ansible_host: 172.16.3.15
+            kzn-osd09:
+              ansible_host: 172.16.19.21
+            kzn-osd10:
+              ansible_host: 172.16.17.21
+            kzn-osd11:
+              ansible_host: 172.16.15.14
+            kzn-osd12:
+              ansible_host: 172.16.15.24
+            kzn-osd13:
+              ansible_host: 172.16.5.32
+            kzn-osd14:
+              ansible_host: 172.16.3.32
+          vars:
+            ansible_user: root
+        openstack_controllers:
+          hosts:
+            neu-19-11:
+              ansible_host: 172.16.19.11
+            neu-17-11:
+              ansible_host: 172.16.17.11
+            neu-15-39:
+              ansible_host: 172.16.15.39
+            neu-5-39:
+              ansible_host: 172.16.5.39
+            neu-3-39:
+              ansible_host: 172.16.3.39
           vars:
             ansible_user: root
         openstack_computes:
           hosts:
             neu-3-35:
-              ansible_host: 172.16.3.35
+              ansible_host: 172.16.5.35
+            neu-3-37:
+              ansible_host: 172.16.3.37
+            neu-5-36:
+              ansible_host: 172.16.5.36
+            neu-5-38:
+              ansible_host: 172.16.5.38
+            neu-15-34:
+              ansible_host: 172.16.15.34
+            neu-5-34:
+              ansible_host: 172.16.5.34
+            neu-15-38:
+              ansible_host: 172.16.15.38
+            neu-5-35:
+              ansible_host: 172.16.5.35
+            neu-3-38:
+              ansible_host: 172.16.3.38
+            neu-3-34:
+              ansible_host: 172.16.3.34
+            neu-5-37:
+              ansible_host: 172.16.5.37
+            neu-15-36:
+              ansible_host: 172.16.15.36
+            neu-15-37:
+              ansible_host: 172.16.15.37
+            neu-3-36:
+              ansible_host: 172.16.3.36
+            neu-15-35:
+              ansible_host: 172.16.15.35
+            neu-15-12:
+              ansible_host: 172.16.15.12
+            neu-17-2:
+              ansible_host: 172.16.17.2
+            neu-17-1:
+              ansible_host: 172.16.17.1
+            neu-19-1:
+              ansible_host: 172.16.19.1
+            neu-19-3:
+              ansible_host: 172.16.19.3
+            neu-19-5:
+              ansible_host: 172.16.19.5
+            neu-17-4:
+              ansible_host: 172.16.17.4
+            neu-17-3:
+              ansible_host: 172.16.17.3
+            neu-19-2:
+              ansible_host: 172.16.19.2
+            neu-19-4:
+              ansible_host: 172.16.19.4
+            neu-19-12:
+              ansible_host: 172.16.19.12
           vars:
             ansible_user: root
     switches:
