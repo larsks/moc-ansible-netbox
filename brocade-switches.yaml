@@ -11,6 +11,13 @@
       vars:
         ansible_command_timeout: 90
 
+    - name: "Set rbridge id"
+      set_fact:
+        rbridge_id: >-
+          "{{ rbridge_stdout.stdout[0].split(':')[1] | default("1") |trim }}"
+        # need to extract the id from an output like this
+        # "stdout": ["Rbridge-id: 4"]
+
     - name: "Get hostname"
       community.network.nos_command:
         commands: >-
@@ -18,9 +25,6 @@
       register: hostname_stdout
       vars:
         ansible_command_timeout: 90
-        rbridge_id: "{{ rbridge_stdout.stdout[0].split(':')[1]|trim }}"
-        # need to extract the id from an output like this
-        # "stdout": ["Rbridge-id: 4"]
 
     - name: "Get switch model"
       community.network.nos_command:
@@ -40,17 +44,22 @@
 
     - name: "Calcuate rack and rackpos"
       set_fact:
-        rack: "{{ parsed_address[-2] }}"
+        rack: "{{ 'row3/podB/cage' + parsed_address[-2] }}"
         rackpos: "{{ parsed_address[-1] }}"
       vars:
         parsed_address: "{{ ansible_host | split('.') }}"
+      when: rack is not defined
+
+    - name: "Set location to default"
+      set_fact:
+        location: "Row 3 Pod B"
+      when: location is not defined
 
     - name: "Set hostname and other vars"
       set_fact:
         brocade_hostname: "{{ hostname_stdout.stdout[0].split(' ')[2] | trim }}"
         brocade_serial: "{{ serial_stdout.stdout[0].split(':')[1] | trim }}"
         brocade_model: "{{ chassis_stdout.stdout[0].split(':')[1] | trim }}"
-        rbridge_id: "{{ rbridge_stdout.stdout[0].split(':')[1] | trim }}"
 
     - name: "Create the device_type"
       netbox.netbox.netbox_device_type:
@@ -70,11 +79,11 @@
           name: "{{ brocade_hostname }}"
           serial: "{{ brocade_serial }}"
           device_type: "{{ brocade_model }}"
-          rack: "{{ 'row3/podB/cage' + rack }}"
+          rack: "{{ rack }}"
           position: "{{rackpos}}"
           device_role: data_switch
           face: front
-          location: Row 3 Pod B
+          location: "{{ location }}"
           site: MGHPCC
         state: present
       delegate_to: 127.0.0.1

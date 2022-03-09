@@ -129,6 +129,31 @@ all:
               ansible_host: 10.0.17.43
             brocade-19-43:
               ansible_host: 10.0.19.43
+            brocade-e1-101:
+              ansible_host: 10.10.10.64
+              location: Row 4 Pod A
+              rack: row4/podA/cage2
+              rackpos: 41
+            brocade-e1-102:
+              ansible_host: 10.10.10.65
+              location: Row 4 Pod A
+              rack: row4/podA/cage2
+              rackpos: 42
+            brocade-e1-103:
+              ansible_host: 10.10.10.66
+              location: Row 4 Pod A
+              rack: row4/podA/cage2
+              rackpos: 43
+            brocade-e1-104:
+              ansible_host: 10.10.10.67
+              location: Row 4 Pod A
+              rack: row4/podA/cage4
+              rackpos: 43
+            brocade-kumo:
+              ansible_host: 10.0.21.24
+              location: Row 4 Pod A
+              rack: row4/podA/cage21
+              rackpos: 24
           vars:
             ansible_network_os: nos
             ansible_password: "{{ moc_brocade_password }}"
