@@ -8,7 +8,7 @@ all:
             ov2.massopen.cloud:
             ov3.massopen.cloud:
           vars:
-            ansible_user: root
+            calculate_rack: true
         production_ceph:
           hosts:
             kzn-mon1:
@@ -38,7 +38,7 @@ all:
             kzn-osd14:
               ansible_host: 172.16.3.32
           vars:
-            ansible_user: root
+            calculate_rack: true
         openstack_controllers:
           hosts:
             neu-19-11:
@@ -52,7 +52,7 @@ all:
             neu-3-39:
               ansible_host: 172.16.3.39
           vars:
-            ansible_user: root
+            calculate_rack: true
         openstack_computes:
           hosts:
             neu-3-35:
@@ -108,27 +108,39 @@ all:
             neu-19-12:
               ansible_host: 172.16.19.12
           vars:
-            ansible_user: root
+            calculate_rack: true
+      vars:
+        ansible_user: root
+        location: Row 3 Pod B
+        calculate_rack: false
     switches:
       children:
         brocade:
           hosts:
             brocade-3-43:
               ansible_host: 10.0.3.43
+              calculate_rack: true
             brocade-3-42:
               ansible_host: 10.0.3.42
+              calculate_rack: true
             brocade-5-43:
               ansible_host: 10.0.5.43
+              calculate_rack: true
             brocade-5-42:
               ansible_host: 10.0.5.42
+              calculate_rack: true
             brocade-15-43:
               ansible_host: 10.0.15.43
+              calculate_rack: true
             brocade-15-42:
               ansible_host: 10.0.15.42
+              calculate_rack: true
             brocade-17-43:
               ansible_host: 10.0.17.43
+              calculate_rack: true
             brocade-19-43:
               ansible_host: 10.0.19.43
+              calculate_rack: true
             brocade-e1-101:
               ansible_host: 10.10.10.64
               location: Row 4 Pod A
@@ -161,14 +173,18 @@ all:
           hosts:
             cisco-19-42:
               ansible_host: 10.0.19.42
+              calculate_rack: true
             cisco-17-42:
               ansible_host: 10.0.17.42
+              calculate_rack: true
           vars:
             ansible_password: "{{ moc_cisco_password }}"
             ansible_network_os: cisco.nxos.nxos
       vars:
         ansible_user: admin
         ansible_connection: ansible.netcommon.network_cli
+        calculate_rack: false
+        location: Row 3 Pob B
     ipmi_switches:
       children:
         brocade_icx:
@@ -181,7 +197,13 @@ all:
               ansible_host: 10.0.15.44
             ipmi-cage17:
               ansible_host: 10.0.17.44
+          vars:
+            calculate_rack: true
         ibm:
           hosts:
             ipmi-cage19:
               ansible_host: 10.0.19.44
+              calculate_rack: true
+      vars:
+        calculate_rack: false
+        location: Row 3 Pod B

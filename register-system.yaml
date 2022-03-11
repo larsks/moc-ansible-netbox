@@ -71,10 +71,11 @@
 
     - name: "Calcuate rack and rackpos"
       set_fact:
-        rack: "{{ parsed_address[-2] }}"
+        rack: "{{ 'row3/podB/cage' + parsed_address[-2] }}"
         rackpos: "{{ parsed_address[-1] }}"
       vars:
         parsed_address: "{{ ipmi_addr.stdout | split('.') }}"
+      when: calculate_rack
 
     - name: "Create the manufacturer"
       ignore_errors: true
@@ -117,7 +118,7 @@
           name: "{{ inventory_hostname }} "
           serial: "{{ (serial.stdout == '.....') | ternary(uuid.stdout, serial.stdout) }}"
           device_type: "{{ product.stdout }}"
-          rack: "{{ 'row3/podB/cage' + rack }}"
+          rack: "{{ rack }}"
           position: "{{rackpos}}"
           device_role: "{{ group_names[0] }}"
           face: front

@@ -8,10 +8,11 @@
 
     - name: "Calcuate rack and rackpos"
       set_fact:
-        rack: "{{ parsed_address[-2] }}"
+        rack: "{{ 'row3/podB/cage' + parsed_address[-2] }}"
         rackpos: "{{ parsed_address[-1] }}"
       vars:
         parsed_address: "{{ ansible_host | split('.') }}"
+      when: calculate_rack
 
     - name: "Create the device_type"
       ignore_errors: true
@@ -33,7 +34,7 @@
           name: "{{ ansible_net_hostname }} "
           serial: "{{ ansible_net_serialnum }}"
           device_type: "{{ ansible_net_model }}"
-          rack: "{{ 'row3/podB/cage' + rack }}"
+          rack: "{{ rack }}"
           position: "{{rackpos}}"
           device_role: data_switch
           face: front

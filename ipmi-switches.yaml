@@ -3,15 +3,19 @@
   gather_facts: false
   tasks:
 
-    - name: "Calcuate rack, rackpos and set device attributes"
+    - name: "Calcuate rack and rackpos"
       set_fact:
-        rack: "{{ parsed_address[-2] }}"
+        rack: "{{ 'row3/podB/cage' + parsed_address[-2] }}"
         rackpos: "{{ parsed_address[-1] }}"
+      vars:
+        parsed_address: "{{ ansible_host | split('.') }}"
+      when: calculate_rack
+
+    - name: "Set device attributes"
+      set_fact:
         device_role: "ipmi_switches"
         manufacturer: "{{ ('brocade_icx' in group_names) | ternary('Brocade', 'IBM') }}"
         model: "{{ ('brocade_icx' in group_names) | ternary('brocade_icx', 'RackSwitch G8000') }}"
-      vars:
-        parsed_address: "{{ ansible_host | split('.') }}"
 
     - name: "Create device role based on ansible group"
       netbox.netbox.netbox_device_role:
@@ -40,7 +44,7 @@
         data:
           name: "{{ inventory_hostname }}"
           device_type: "{{ model }}"
-          rack: "{{ 'row3/podB/cage' + rack }}"
+          rack: "{{ rack }}"
           position: "{{rackpos}}"
           device_role: "{{ device_role }}"
           face: front
