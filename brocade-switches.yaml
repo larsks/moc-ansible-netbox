@@ -48,7 +48,7 @@
         rackpos: "{{ parsed_address[-1] }}"
       vars:
         parsed_address: "{{ ansible_host | split('.') }}"
-      when: rack is not defined
+      when: calculate_rack
 
     - name: "Set location to default"
       set_fact:
