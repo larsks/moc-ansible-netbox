@@ -1,0 +1,97 @@
+netbox_vlans:
+  - name: MOC IPMI
+    vid: 1
+    description: "IPMI network is its own physical network"
+  - name: CSAIL 10
+    vid: 10
+    description: "CSAIL VLAN 10 for public networks"
+  - name: BU Public
+    vid: 105
+    description: "BU Public IPs"
+  - name: NEU Public
+    vid: 127
+    description: "NEU Public IPs for infrastructure"
+  - name: Foreman
+    vid: 201
+    description: "MOC Foreman network"
+  - name: Openstack Internal API
+    vid: 202
+  - name: Openstack Tenant Network
+    vid: 203
+  - name: HIL Internet
+    vid: 204
+    description: "Provides routed internet access to HIL clients"
+  - name: oVirt Gluster
+    vid: 205
+    description: "Gluster and VM migration for oVirt"
+  - name: Openstack Native
+    vid: 206
+    description: "Native network on openstack hosts"
+  - name: OCT Switch Management
+    vid: 207
+    description: "For MOC to manage OCT switches"
+  - name: ESI Control Plane
+    vid: 208
+  - name: Openshit Internal
+    vid: 209
+  - name: OpenShift NFS
+    vid: 210
+  - name: NESE
+    vid: 211
+    description: New England Storage Exchange
+  - name: Openshift Staging Internal
+    vid: 212
+  - name: ovirt cluster replication
+    vid: 248
+  - name: Ceph Cluster
+    vid: 249
+    description: "Cluster network"
+  - name: Ceph Public
+    vid: 250
+    description: "Ceph clients"
+  - name: Research Ceph
+    vid: 252
+  - name: Staging Foreman
+    vid: 269
+    status: Deprecated
+  - name: Staging Internal API
+    vid: 270
+    status: Deprecated
+  - name: Staging Tenant Network
+    vid: 271
+    status: Deprecated
+  - name: Staging Public Network
+    vid: 272
+    status: Deprecated
+  - name: Staging Trunk Isolation
+    vid: 273
+    status: Deprecated
+    description: "Native network for trunk ports in staging cluster"
+  - name: MaaS Internal Provisioning
+    vid: 277
+    description: "MaaS internal provisioning"
+  - name: MaaS Second Nic
+    vid: 280
+    description: "Maas Network for second nic"
+  - name: BMI
+    vid: 500
+    description: "BMI Provisioning VLAN"
+  - name: Stack BMI
+    vid: 501
+    status: Deprecated
+  - name: OCT nodes IPMI 1
+    vid: 911
+  - name: OCT nodes IPMI 2
+    vid: 912
+  - name: CSAIL 3801
+    vid: 3801
+    description: "Floating IPs for ESI"
+  - name: CSAIL 3802
+    vid: 3802
+    description: "Floating IPs for Kaizen Openstack"
+  - name: CSAIL 3803
+    vid: 3803
+    description: "MaaS public and provisioning"
+  - name: Kumo IPMI
+    vid: 4013
+    description: "IPMI for some kumo hosts"
