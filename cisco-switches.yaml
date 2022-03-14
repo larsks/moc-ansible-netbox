@@ -14,6 +14,11 @@
         parsed_address: "{{ ansible_host | split('.') }}"
       when: calculate_rack
 
+    - name: "Set location to default"
+      set_fact:
+        location: "Row 3 Pod B"
+      when: location is not defined
+
     - name: "Create the device_type"
       ignore_errors: true
       netbox.netbox.netbox_device_type:
@@ -51,7 +56,7 @@
           name: "{{ item }}"
           device: "{{ ansible_net_hostname }}"
           mac_address: "{{ interface.macaddress }}"
-          description: "{{ interface.description }}"
+          description: "{{ interface.description | default('unknown') }}"
           mode: "{{ (interface.mode == 'trunk') | ternary('Tagged', 'Access') }}"
           type: SFP+ (10GE)
         state: present
@@ -60,7 +65,7 @@
           {{ ansible_net_interfaces[item] }}
       delegate_to: 127.0.0.1
       loop: "{{ansible_net_interfaces.keys() | list}}"
-      when: interface.type == "1000/10000 Ethernet"
+      when: interface.type is defined and (interface.type == "1000/10000 Ethernet" or interface.bandwidth == "10000000")
 
     - name: "Create 40G network interfaces"
       netbox.netbox.netbox_device_interface:
@@ -79,7 +84,7 @@
           {{ ansible_net_interfaces[item] }}
       delegate_to: 127.0.0.1
       loop: "{{ansible_net_interfaces.keys() | list}}"
-      when: interface.type == "40000 Ethernet"
+      when: interface.type is defined and interface.type == "40000 Ethernet"
 
     - name: "Create port-channels"
       netbox.netbox.netbox_device_interface:
@@ -98,7 +103,7 @@
           {{ ansible_net_interfaces[item] }}
       delegate_to: 127.0.0.1
       loop: "{{ansible_net_interfaces.keys() | list}}"
-      when: interface.type == "Port-Channel"
+      when: interface.type is defined and interface.type == "Port-Channel"
 
     - name: "Create management interface of the switch"
       netbox.netbox.netbox_device_interface:

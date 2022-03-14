@@ -177,6 +177,12 @@ all:
             cisco-17-42:
               ansible_host: 10.0.17.42
               calculate_rack: true
+            kumo-nexus:
+              ansible_host: 10.1.11.2
+              rack: row4/podA/cage23
+              rackpos: 40
+              location: Row 4 Pod A
+              ansible_password: "{{ kumo_nexus_password }}"
           vars:
             ansible_password: "{{ moc_cisco_password }}"
             ansible_network_os: cisco.nxos.nxos
