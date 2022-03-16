@@ -77,6 +77,10 @@
         parsed_address: "{{ ipmi_addr.stdout | split('.') }}"
       when: calculate_rack
 
+    - name: "Set prefixes"
+      set_fact:
+        prefixes: "{{ netbox_prefixes | map(attribute='prefix') | list }}"
+
     - name: "Create the manufacturer"
       ignore_errors: true
       netbox.netbox.netbox_manufacturer:
@@ -184,7 +188,7 @@
           {{ hostvars[inventory_hostname]["ansible_{}".format(item.replace('-', '_'))] }}
       delegate_to: 127.0.0.1
       loop: "{{ansible_interfaces | difference(physical_interfaces.stdout_lines)}}"
-      when: interface.type == "ether" and interface.ipv4.address is defined
+      when: interface.ipv4.address is defined and (prefixes | select('network_contains', interface.ipv4.address))
 
     - name: "Associate IP addresses with network interfaces"
       netbox.netbox.netbox_ip_address:
@@ -201,7 +205,7 @@
           {{ hostvars[inventory_hostname]["ansible_{}".format(item.replace('-', '_'))] }}
       delegate_to: 127.0.0.1
       loop: "{{ ansible_interfaces }}"
-      when: interface.type == "ether" and interface.ipv4.address is defined
+      when: interface.ipv4.address is defined and (prefixes | select('network_contains', interface.ipv4.address))
 
     - name: "Pause for some time so that lldptool has enough time to capture necessary information"
       pause:
