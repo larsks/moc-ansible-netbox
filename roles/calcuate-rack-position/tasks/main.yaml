@@ -8,4 +8,4 @@
 
 - name: "Calulate rack name"
   set_fact:
-    rack: "{{ location + '/Cage/' + (rack_number|string) }}"
+    rack: "{{ location + '/Cage' + (rack_number|string) }}"
