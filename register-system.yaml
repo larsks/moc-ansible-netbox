@@ -262,6 +262,6 @@
             name: IPMI Interface
           termination_b_type: dcim.interface
           termination_b:
-            device: ipmi-cage{{ rack }}
+            device: ipmi-cage{{ rack_number }}
             name: GigabitEthernet 1/1/{{ rackpos }}
       delegate_to: 127.0.0.1
