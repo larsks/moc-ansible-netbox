@@ -2,6 +2,12 @@
   hosts: brocade
   tasks:
 
+    - name: "Cacluate and set rack, rack_number and rackpos"
+      include_role:
+        name: calcuate-rack-position
+      vars:
+        ipmi_ip: "{{ ansible_host }}"
+
     # it's important to get the rbridge id to get the hostname
     - name: "Get rbridge ID"
       community.network.nos_command:
@@ -41,19 +47,6 @@
       register: serial_stdout
       vars:
         ansible_command_timeout: 90
-
-    - name: "Calcuate rack and rackpos"
-      set_fact:
-        rack: "{{ 'row3/podB/cage' + parsed_address[-2] }}"
-        rackpos: "{{ parsed_address[-1] }}"
-      vars:
-        parsed_address: "{{ ansible_host | split('.') }}"
-      when: calculate_rack
-
-    - name: "Set location to default"
-      set_fact:
-        location: "Row 3 Pod B"
-      when: location is not defined
 
     - name: "Set hostname and other vars"
       set_fact:
