@@ -1,10 +1,12 @@
 netbox_manufacturers:
+  - Accton
   - Brocade
   - Cisco
   - Dell
   - IBM
   - Generic
   - Intel
+  - Juniper
   - Lenovo
   - Mellanox
   - Quanta

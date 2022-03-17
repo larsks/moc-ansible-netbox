@@ -205,11 +205,50 @@ all:
               ansible_host: 10.0.17.44
           vars:
             calculate_rack: true
+            model: brocade_icx
+            manufacturer: Brocade
         ibm:
           hosts:
             ipmi-cage19:
               ansible_host: 10.0.19.44
               calculate_rack: true
+          vars:
+            model: RackSwitch G8000
+            manufacturer: IBM
+        cisco_catalyst:
+          hosts:
+            r4-pA-c23-catalyst3650:
+              ansible_host: 10.0.23.41
+              calculate_rack: true
+            egg1-r4pAc04-mgmt:
+              ansible_host: 10.10.10.1
+              rack_number: 4
+              rackpos: 44
+            egg1-r4pAc02-mgmt:
+              ansible_host: 10.10.10.2
+              rack_number: 2
+              rackpos: 44
+          vars:
+            manufacturer: Cisco
+            model: catalyst3650
+            location: Row4/PodA
+        juniper:
+          hosts:
+            e1-r4pAc04-mgmt-02:
+              ansible_host: 10.10.10.5
+              rack_number: 4
+              rackpos: 42
+              location: Row4/PodA
+              manufacturer: Juniper
+              model: ex3300
+        cumulus:
+          hosts:
+            bu-21-25:
+              ansible_host: 10.0.21.25
+              calculate_rack: true
+              manufacturer: Accton
+              model: as4610_54
+              location: Row4/PodA
       vars:
         calculate_rack: false
         location: Row3/PodB
