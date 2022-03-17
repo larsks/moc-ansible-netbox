@@ -111,7 +111,7 @@ all:
             calculate_rack: true
       vars:
         ansible_user: root
-        location: Row 3 Pod B
+        location: Row3/PodB
         calculate_rack: false
     switches:
       children:
@@ -143,28 +143,28 @@ all:
               calculate_rack: true
             brocade-e1-101:
               ansible_host: 10.10.10.64
-              location: Row 4 Pod A
-              rack: row4/podA/cage2
+              location: Row4/PodA
+              rack_number: 2
               rackpos: 41
             brocade-e1-102:
               ansible_host: 10.10.10.65
-              location: Row 4 Pod A
-              rack: row4/podA/cage2
+              location: Row4/PodA
+              rack_number: 2
               rackpos: 42
             brocade-e1-103:
               ansible_host: 10.10.10.66
-              location: Row 4 Pod A
-              rack: row4/podA/cage2
+              location: Row4/PodA
+              rack_number: 2
               rackpos: 43
             brocade-e1-104:
               ansible_host: 10.10.10.67
-              location: Row 4 Pod A
-              rack: row4/podA/cage4
+              location: Row4/PodA
+              rack_number: 4
               rackpos: 43
             brocade-kumo:
               ansible_host: 10.0.21.24
-              location: Row 4 Pod A
-              rack: row4/podA/cage21
+              location: Row4/PodA
+              rack_number: 21
               rackpos: 24
           vars:
             ansible_network_os: nos
@@ -179,9 +179,9 @@ all:
               calculate_rack: true
             kumo-nexus:
               ansible_host: 10.1.11.2
-              rack: row4/podA/cage23
+              rack_number: 23
               rackpos: 40
-              location: Row 4 Pod A
+              location: Row4/PodA
               ansible_password: "{{ kumo_nexus_password }}"
           vars:
             ansible_password: "{{ moc_cisco_password }}"
@@ -190,7 +190,7 @@ all:
         ansible_user: admin
         ansible_connection: ansible.netcommon.network_cli
         calculate_rack: false
-        location: Row 3 Pob B
+        location: Row3/PodB
     ipmi_switches:
       children:
         brocade_icx:
@@ -212,4 +212,4 @@ all:
               calculate_rack: true
       vars:
         calculate_rack: false
-        location: Row 3 Pod B
+        location: Row3/PodB

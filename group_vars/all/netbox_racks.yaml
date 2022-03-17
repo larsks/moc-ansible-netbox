@@ -1,19 +1,19 @@
 netbox_racks:
   - site: MGHPCC
-    location: Row 3 Pod B
+    location: Row3/PodB
     u_height: 44
     racks:
-      - name: row3/podB/cage3
-      - name: row3/podB/cage5
-      - name: row3/podB/cage15
-      - name: row3/podB/cage17
-      - name: row3/podB/cage19
+      - name: Row3/PodB/Cage3
+      - name: Row3/PodB/Cage5
+      - name: Row3/PodB/Cage15
+      - name: Row3/PodB/Cage17
+      - name: Row3/PodB/Cage19
 
   - site: MGHPCC
-    location: Row 4 Pod A
+    location: Row4/PodA
     u_height: 44
     racks:
-      - name: row4/podA/cage2
-      - name: row4/podA/cage4
-      - name: row4/podA/cage21
-      - name: row4/podA/cage23
+      - name: Row4/PodA/Cage2
+      - name: Row4/PodA/Cage4
+      - name: Row4/PodA/Cage21
+      - name: Row4/PodA/Cage23

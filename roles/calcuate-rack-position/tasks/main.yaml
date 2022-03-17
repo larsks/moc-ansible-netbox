@@ -1,0 +1,11 @@
+- name: "Calcuate rack_number and rack_position"
+  set_fact:
+    rack_number: "{{ parsed_address[-2] }}"
+    rackpos: "{{ parsed_address[-1] }}"
+  vars:
+    parsed_address: "{{ ipmi_ip | split('.') }}"
+  when: calculate_rack
+
+- name: "Calulate rack name"
+  set_fact:
+    rack: "{{ location + '/Cage' + (rack_number|string) }}"

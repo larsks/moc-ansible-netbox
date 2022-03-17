@@ -3,13 +3,11 @@
   gather_facts: false
   tasks:
 
-    - name: "Calcuate rack and rackpos"
-      set_fact:
-        rack: "{{ 'row3/podB/cage' + parsed_address[-2] }}"
-        rackpos: "{{ parsed_address[-1] }}"
+    - name: "Cacluate and set rack, rack_number and rackpos"
+      include_role:
+        name: calcuate-rack-position
       vars:
-        parsed_address: "{{ ansible_host | split('.') }}"
-      when: calculate_rack
+        ipmi_ip: "{{ ansible_host }}"
 
     - name: "Set device attributes"
       set_fact:

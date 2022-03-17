@@ -56,6 +56,12 @@
         ipmitool lan print | awk -F' *: *' '$1 == "IP Address" {print $2}'
       register: ipmi_addr
 
+    - name: "Cacluate and set rack, rack_number and rackpos"
+      include_role:
+        name: calcuate-rack-position
+      vars:
+        ipmi_ip: "{{ ipmi_addr.stdout }}"
+
     - name: "Create a dictionary mapping interface speeds and module name with netbox names"
       set_fact:
         speed_map: {
@@ -68,14 +74,6 @@
           'tg3': '1000Base-t (1GE)',
           'sfc': '10GBase-t (10GE)'
         }
-
-    - name: "Calcuate rack and rackpos"
-      set_fact:
-        rack: "{{ 'row3/podB/cage' + parsed_address[-2] }}"
-        rackpos: "{{ parsed_address[-1] }}"
-      vars:
-        parsed_address: "{{ ipmi_addr.stdout | split('.') }}"
-      when: calculate_rack
 
     - name: "Set prefixes"
       set_fact:
@@ -264,6 +262,6 @@
             name: IPMI Interface
           termination_b_type: dcim.interface
           termination_b:
-            device: ipmi-cage{{ rack }}
+            device: ipmi-cage{{ rack_number }}
             name: GigabitEthernet 1/1/{{ rackpos }}
       delegate_to: 127.0.0.1
