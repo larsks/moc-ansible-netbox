@@ -12,8 +12,8 @@
     - name: "Set device attributes"
       set_fact:
         device_role: "ipmi_switches"
-        manufacturer: "{{ ('brocade_icx' in group_names) | ternary('Brocade', 'IBM') }}"
-        model: "{{ ('brocade_icx' in group_names) | ternary('brocade_icx', 'RackSwitch G8000') }}"
+        manufacturer: "{{ manufacturer }}"
+        model: "{{ model }}"
 
     - name: "Create device role based on ansible group"
       netbox.netbox.netbox_device_role:
