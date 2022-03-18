@@ -232,7 +232,7 @@
     - name: "Create list containing NIC, switchport and switch hostname"
       set_fact:
         connections: "{{ connections + [[nic, switchport, switch]] }}"
-      when: item.rc == 0
+      when: item.rc == 0 and item.stdout != ""  # some systems just didn't report anything in the output
       loop: "{{ sysnames.results }}"
       vars:
         connections: []
@@ -256,6 +256,7 @@
             name: "{{ item[1] }}"
       delegate_to: 127.0.0.1
       loop: "{{ connections }}"
+      when: connections is defined
 
     - name: "Create cable for IPMI interface"
       netbox.netbox.netbox_cable:
