@@ -46,7 +46,7 @@
           position: "{{rackpos}}"
           device_role: "{{ device_role }}"
           face: front
-          location: Row 3 Pod B
+          location: "{{ location }}"
           site: MGHPCC
         state: present
       delegate_to: 127.0.0.1
