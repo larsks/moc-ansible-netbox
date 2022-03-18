@@ -169,7 +169,7 @@
           name: "{{ item }}"
           mac_address: "{{ interface.macaddress|default('unknown') }}"
           type: >-
-            {{ speed_map[interface.speed|string] if interface.speed is defined else module_map[interface.module] | default('Other') }}
+            {{ (module_map[interface.module] if interface.module is defined else speed_map[interface.speed|string]) | default('Other') }}
         state: present
       vars:
         interface: >-
