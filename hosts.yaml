@@ -9,6 +9,18 @@ all:
             ov3.massopen.cloud:
           vars:
             calculate_rack: true
+        misc:
+          hosts:
+            neu-3-30:
+              ansible_host: 172.16.3.30
+              height: 2
+              rack_number: 3
+              rackpos: 30
+            neu-5-30:
+              ansible_host: 172.16.5.30
+              height: 2
+              rack_number: 5
+              rackpos: 30
         production_ceph:
           hosts:
             kzn-mon1:

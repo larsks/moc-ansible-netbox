@@ -1,0 +1,14 @@
+# a dictionary mapping interface speeds and module name with netbox names
+speed_map: {
+  '-1': 'Other',
+  '1000': '1000Base-t (1GE)',
+  '10000': 'SFP+ (10GE)',
+  '40000': 'QSFP+ (40GE)'
+}
+module_map: {
+  'ixgbe': 'SFP+ (10GE)',
+  'tg3': '1000Base-t (1GE)',
+  'sfc': 'SFP+ (10GE)',
+  'iavf': 'QSFP+ (40GE)',
+  'i40e': 'QSFP+ (40GE)'
+}

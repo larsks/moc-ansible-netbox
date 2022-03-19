@@ -46,6 +46,12 @@
     - name: "Get chassis height"
       shell: dmidecode --type chassis |grep Height | cut -d ' ' -f 2
       register: chassis_height
+      when: height is not defined
+
+    - name: "Set height"
+      set_fact:
+        height: "{{ chassis_height.stdout }}"
+      when: height is not defined
 
     - name: "Get IPMI Interface's mac address"
       shell: ipmitool lan print |grep "MAC Address" | awk '{print $4}'
@@ -61,19 +67,6 @@
         name: calcuate-rack-position
       vars:
         ipmi_ip: "{{ ipmi_addr.stdout }}"
-
-    - name: "Create a dictionary mapping interface speeds and module name with netbox names"
-      set_fact:
-        speed_map: {
-          '-1': '1000Base-t (1GE)',
-          '1000': '1000Base-t (1GE)',
-          '10000': '10GBase-t (10GE)'
-        }
-        module_map: {
-          'ixgbe': '10GBase-t (10GE)',
-          'tg3': '1000Base-t (1GE)',
-          'sfc': '10GBase-t (10GE)'
-        }
 
     - name: "Set prefixes"
       set_fact:
@@ -97,7 +90,7 @@
         data:
           manufacturer: "{{ manufacturer.stdout }}"
           model: "{{ product.stdout }}"
-          u_height: "{{ chassis_height.stdout }}"
+          u_height: "{{ height }}"
         state: present
       delegate_to: 127.0.0.1
 
@@ -118,7 +111,7 @@
         data:
           # https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html#defining-different-values-for-true-false-null-ternary
           name: "{{ inventory_hostname }} "
-          serial: "{{ (serial.stdout == '.....') | ternary(uuid.stdout, serial.stdout) }}"
+          serial: "{{ ('....' in serial.stdout) | ternary(uuid.stdout, serial.stdout) }}"
           device_type: "{{ product.stdout }}"
           rack: "{{ rack }}"
           position: "{{rackpos}}"
@@ -163,7 +156,7 @@
           name: "{{ item }}"
           mac_address: "{{ interface.macaddress|default('unknown') }}"
           type: >-
-            {{ speed_map[interface.speed|string] if interface.speed is defined else module_map[interface.module] | default('Other') }}
+            {{ (module_map[interface.module] if interface.module is defined else speed_map[interface.speed|string]) | default('Other') }}
         state: present
       vars:
         interface: >-
@@ -226,7 +219,7 @@
     - name: "Create list containing NIC, switchport and switch hostname"
       set_fact:
         connections: "{{ connections + [[nic, switchport, switch]] }}"
-      when: item.rc == 0
+      when: item.rc == 0 and item.stdout != ""  # some systems just didn't report anything in the output
       loop: "{{ sysnames.results }}"
       vars:
         connections: []
@@ -250,6 +243,7 @@
             name: "{{ item[1] }}"
       delegate_to: 127.0.0.1
       loop: "{{ connections }}"
+      when: connections is defined
 
     - name: "Create cable for IPMI interface"
       netbox.netbox.netbox_cable:
