@@ -7,6 +7,10 @@ all:
             ov1.massopen.cloud:
             ov2.massopen.cloud:
             ov3.massopen.cloud:
+            neu-17-40:
+              ansible_host: 172.16.17.40
+            neu-19-40:
+              ansible_host: 172.16.19.40
           vars:
             calculate_rack: true
         misc:
