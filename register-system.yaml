@@ -204,7 +204,7 @@
 
     - name: "Get switchport name that's connected to NIC"
       shell: >-
-        lldptool -i {{ item }} get-tlv -n -V portID | awk -F": " '/Ifname|Local/ {print $2}'
+        lldptool -i {{ item }} get-tlv -n |grep "Port ID" -A1 | awk -F": " '/Ifname|Local/ {print $2}'
       failed_when: false
       loop: "{{ physical_interfaces.stdout_lines }}"
       register: port_ids
