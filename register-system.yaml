@@ -149,6 +149,7 @@
             name: IPMI Interface
             device: "{{ inventory_hostname }}"
         state: present
+      when: ipmi_addr.stdout != '0.0.0.0'
       delegate_to: 127.0.0.1
 
     - name: "Create physical network interfaces"
