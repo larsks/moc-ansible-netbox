@@ -27,6 +27,10 @@
       command: lldptool -i {{ item }} set-lldp adminstatus=rx
       loop: "{{ physical_interfaces.stdout_lines }}"
 
+    - name: "Enable LLDP on intel NICs"
+      include_role:
+        name: enable-lldp-intel
+
     - name: "Get manufacturer"
       command: dmidecode --string system-manufacturer
       register: manufacturer
