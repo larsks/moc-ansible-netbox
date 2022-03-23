@@ -13,6 +13,21 @@ all:
               ansible_host: 172.16.19.40
           vars:
             calculate_rack: true
+        cache_servers:
+          hosts:
+            neu-3-41:
+              ansible_host: 10.128.0.25
+            neu-5-41:
+              ansible_host: 10.128.0.30
+            neu-15-41:
+              ansible_host: 10.128.0.31
+            neu-17-41:
+              ansible_host: 10.128.0.59
+            neu-19-41:
+              ansible_host: 10.128.0.19
+          vars:
+            calculate_rack: true
+            height: 1
         misc:
           hosts:
             neu-3-30:
