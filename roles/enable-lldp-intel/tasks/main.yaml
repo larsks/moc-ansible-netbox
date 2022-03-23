@@ -1,0 +1,19 @@
+- name: "Check if there are intel nics of type i40e"
+  set_fact:
+    apply_intel_fix: true
+  when: interface.module == 'i40e'
+  vars:
+    interface: >-
+      {{ hostvars[inventory_hostname]["ansible_{}".format(item.replace('-', '_'))] }}
+  loop: "{{ physical_interfaces.stdout_lines }}"
+
+- name: "Get path for the intel nics"
+  command: find /sys/kernel/debug/i40e/ -name "command"
+  register: path
+  when: apply_intel_fix is defined and apply_intel_fix is true
+
+- name: "Apply the fix"
+  shell: >-
+    echo lldp stop > {{ item }}
+  loop: "{{path.stdout_lines}}"
+  when: apply_intel_fix is defined and apply_intel_fix is true
