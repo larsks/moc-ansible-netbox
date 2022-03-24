@@ -65,12 +65,16 @@
       shell: >-
         ipmitool lan print | awk -F' *: *' '$1 == "IP Address" {print $2}'
       register: ipmi_addr
+      when: ipmi_ip is not defined
+
+    - name: "Set IPMI IP"
+      set_fact:
+        ipmi_ip: "{{ ipmi_addr.stdout }}"
+      when: ipmi_ip is not defined
 
     - name: "Cacluate and set rack, rack_number and rackpos"
       include_role:
         name: calcuate-rack-position
-      vars:
-        ipmi_ip: "{{ ipmi_addr.stdout }}"
 
     - name: "Set prefixes"
       set_fact:
@@ -144,12 +148,12 @@
         netbox_url: "{{ netbox_url }}"
         netbox_token: "{{ netbox_token }}"
         data:
-          address: "{{ ipmi_addr.stdout }}"
+          address: "{{ ipmi_ip }}"
           assigned_object:
             name: IPMI Interface
             device: "{{ inventory_hostname }}"
         state: present
-      when: ipmi_addr.stdout != '0.0.0.0'
+      when: ipmi_ip != '0.0.0.0'
       delegate_to: 127.0.0.1
 
     - name: "Create physical network interfaces"

@@ -33,13 +33,13 @@ all:
             neu-3-30:
               ansible_host: 172.16.3.30
               height: 2
-              rack_number: 3
-              rackpos: 30
+              ipmi_ip: 10.0.3.30
             neu-5-30:
               ansible_host: 172.16.5.30
               height: 2
-              rack_number: 5
-              rackpos: 30
+              ipmi_ip: 10.0.5.30
+          vars:
+            calculate_rack: true
         production_ceph:
           hosts:
             kzn-mon1:
