@@ -64,12 +64,12 @@
     - name: "Get IPMI address"
       shell: >-
         ipmitool lan print | awk -F' *: *' '$1 == "IP Address" {print $2}'
-      register: ipmi_addr
+      register: ipmi_ip_cmd
       when: ipmi_ip is not defined
 
     - name: "Set IPMI IP"
       set_fact:
-        ipmi_ip: "{{ ipmi_addr.stdout }}"
+        ipmi_ip: "{{ ipmi_ip_cmd.stdout }}"
       when: ipmi_ip is not defined
 
     - name: "Cacluate and set rack, rack_number and rackpos"
