@@ -283,3 +283,24 @@ all:
       vars:
         calculate_rack: false
         location: Row3/PodB
+    virtual_machines:
+      children:
+        ovirt_cluster:
+          hosts:
+            ansible:
+              ansible_host: 172.16.0.204
+            ceph-production-public-dhcp:
+              ansible_host: 172.16.0.215
+            dhcp1.cnv.massopen.cloud:
+              ansible_host: 129.10.5.55
+            dhcp2.cnv.massopen.cloud:
+              ansible_host: 129.10.5.56
+          vars:
+            cluster: "ovirt_cluster"
+        neu_3_30_cluster:
+          hosts:
+            kaizenbm.massopen.cloud:
+          vars:
+            cluster: "neu_3_30_cluster"
+      vars:
+        ansible_user: root

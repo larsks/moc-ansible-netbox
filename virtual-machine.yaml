@@ -1,0 +1,50 @@
+- name: "Register Virtual Machines"
+  hosts: virtual_machines
+  tasks:
+
+    - name: "Set prefixes"
+      set_fact:
+        prefixes: "{{ netbox_prefixes | map(attribute='prefix') | list }}"
+
+    - name: "Register VM in netbox"
+      netbox.netbox.netbox_virtual_machine:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "{{ inventory_hostname }} "
+          cluster: "{{ cluster }}"
+        state: present
+      delegate_to: 127.0.0.1
+
+    - name: "Create network interfaces that have an IP"
+      netbox.netbox.netbox_vm_interface:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          virtual_machine: "{{ inventory_hostname }}"
+          name: "{{ item }}"
+          mac_address: "{{ interface.macaddress|default('unknown') }}"
+        state: present
+      vars:
+        interface: >-
+          {{ hostvars[inventory_hostname]["ansible_{}".format(item.replace('-', '_'))] }}
+      delegate_to: 127.0.0.1
+      loop: "{{ansible_interfaces}}"
+      when: interface.ipv4.address is defined and (prefixes | select('network_contains', interface.ipv4.address))
+
+    - name: "Associate IP addresses with network interfaces"
+      netbox.netbox.netbox_ip_address:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          address: "{{ interface.ipv4.address }}"
+          assigned_object:
+            name: "{{ item }}"
+            virtual_machine: "{{ inventory_hostname }}"
+        state: present
+      vars:
+        interface: >-
+          {{ hostvars[inventory_hostname]["ansible_{}".format(item.replace('-', '_'))] }}
+      delegate_to: 127.0.0.1
+      loop: "{{ ansible_interfaces }}"
+      when: interface.ipv4.address is defined and (prefixes | select('network_contains', interface.ipv4.address))
