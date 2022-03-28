@@ -297,10 +297,10 @@ all:
               ansible_host: 129.10.5.56
           vars:
             cluster: "ovirt_cluster"
-        neu-3-30_cluster:
+        neu_3_30_cluster:
           hosts:
             kaizenbm.massopen.cloud:
           vars:
-            cluster: "neu-3-30_cluster"
+            cluster: "neu_3_30_cluster"
       vars:
         ansible_user: root

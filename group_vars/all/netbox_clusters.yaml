@@ -1,5 +1,5 @@
 netbox_clusters:
   - name: ovirt_cluster
     type: virtualization
-  - name: neu-3-30_cluster
+  - name: neu_3_30_cluster
     type: virtualization
