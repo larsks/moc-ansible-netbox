@@ -217,6 +217,19 @@ all:
           vars:
             ansible_password: "{{ moc_cisco_password }}"
             ansible_network_os: cisco.nxos.nxos
+        mellanox_onyx:
+          hosts:
+            bu-21-21:
+              ansible_host: 10.0.21.21
+            bu-21-23:
+              ansible_host: 10.0.21.23
+          vars:
+            ansible_network_os: onyx
+            ansible_become: true
+            ansible_become_method: enable
+            location: Row4/PodA
+            ansible_password: "{{ mellanox_password }}"
+            calculate_rack: true
       vars:
         ansible_user: admin
         ansible_connection: ansible.netcommon.network_cli
