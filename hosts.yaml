@@ -347,8 +347,6 @@ all:
             rhel-6-repomirror:
               ansible_host: 129.10.5.110
             rz.infra.massopen.cloud:
-            signup:
-              ansible_host:
             sso1.infra.massopen.cloud:
             sso2.infra.massopen.cloud:
             stackgraf:
