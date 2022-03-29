@@ -295,6 +295,66 @@ all:
               ansible_host: 129.10.5.55
             dhcp2.cnv.massopen.cloud:
               ansible_host: 129.10.5.56
+            dns.massopen.cloud:
+            foreman:
+              ansible_host: 172.16.0.3
+            freeipa.infra.massopen.cloud:
+            freeipa2.infra.massopen.cloud:
+            helpdeskvm.massopen.cloud:
+            ovirt.massopen.cloud:
+            kcephdata:
+              ansible_host: 192.168.32.8
+            kumo-hil:
+              ansible_host: 172.16.100.115
+            kumo-hil-client.infra.massopen.cloud:
+            kzn-cacti:
+              ansible_host: 172.16.0.7
+            kzn-dns2:
+              ansible_host: 172.16.0.8
+            kzn-hil-server.infra.massopen.cloud:
+            kzn-ipmi-gw.infra.massopen.cloud:
+            kzn-ipmi2-gw.infra.massopen.cloud:
+            kzn-nagios.infra.massopen.cloud:
+            kzn-ovpn.massopen.cloud:
+            kzn-rgw1.infra.massopen.cloud:
+            kzn-rgw2.infra.massopen.cloud:
+            kzn-rgw-j-01:
+              ansible_host: 172.16.0.205
+            kzn-rgw-j-02:
+              ansible_host: 172.16.0.221
+            kzn-rmon1:
+              ansible_host: 192.168.32.1
+            kzn-rmon2:
+              ansible_host: 192.168.32.2
+            kzn-rmon3:
+              ansible_host: 192.168.32.3
+            kzn-rtr.infra.massopen.cloud:
+            kzn-ssh.infra.massopen.cloud:
+            kzn-undercloud:
+              ansible_host: 172.16.0.5
+            maas.massopen.cloud:
+            mochat.infra.massopen.cloud:
+            mondata.infra.massopen.cloud:
+            openstack-monitoring:
+              ansible_host: 172.16.0.213
+            ns1.osh.massopen.cloud:
+            ns2.osh.massopen.cloud:
+            rcephdata:
+              ansible_host: 192.168.32.7
+            kzn-recdns1.infra.massopen.cloud:
+            kzn-recdns2.infra.massopen.cloud:
+            reports.infra.massopen.cloud:
+            rhel-6-repomirror:
+              ansible_host: 129.10.5.110
+            rz.infra.massopen.cloud:
+            sso1.infra.massopen.cloud:
+            sso2.infra.massopen.cloud:
+            stackgraf:
+              ansible_host: 192.168.32.11
+            tld.massopen.cloud:
+            ns2.massopen.cloud:
+            www.massopen.cloud:
+            zabbix.massopen.cloud:
           vars:
             cluster: "ovirt_cluster"
         neu_3_30_cluster:
