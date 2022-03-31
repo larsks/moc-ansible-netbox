@@ -230,6 +230,59 @@ all:
             location: Row4/PodA
             ansible_password: "{{ mellanox_password }}"
             calculate_rack: true
+        dell_os9:
+          hosts:
+            oct-1:
+              ansible_host: 10.1.0.11
+              location: Row1/PodC
+              rack_number: 8
+              rackpos: 44
+            oct-2:
+              ansible_host: 10.1.0.12
+              location: Row1/PodC
+              rack_number: 10
+              rackpos: 44
+            oct-3:
+              ansible_host: 10.1.0.13
+              location: Row1/PodC
+              rack_number: 14
+              rackpos: 44
+            oct-4:
+              ansible_host: 10.1.0.14
+              location: Row1/PodC
+              rack_number: 16
+              rackpos: 44
+            oct-5a:
+              ansible_host: 10.1.0.15
+              location: Row6/PodB
+              rack_number: 4
+              rackpos: 44
+            oct-hub-1:
+              ansible_host: 10.1.0.101
+              location: Row6/PodB
+              rack_number: 2
+              rackpos: 44
+            oct-hub-2:
+              ansible_host: 10.1.0.102
+              location: Row6/PodB
+              rack_number: 2
+              rackpos: 43
+            oct-hub-3:
+              ansible_host: 10.1.0.103
+              location: Row1/PodC
+              rack_number: 12
+              rackpos: 44
+            OCT-HUB-MGMT:
+              ansible_host: 10.1.0.104
+              location: Row6/PodB
+              rack_number: 2
+              rackpos: 42
+          vars:
+            ansible_password: "{{ oct_switch_password }}"
+            ansible_become: true
+            ansible_become_method: enable
+            ansible_become_password: "{{ oct_switch_password }}"
+            ansible_network_os: dellemc.os9.os9
       vars:
         ansible_user: admin
         ansible_connection: ansible.netcommon.network_cli
