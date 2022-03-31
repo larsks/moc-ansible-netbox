@@ -5,6 +5,7 @@ netbox_racks:
     racks:
       - name: Row3/PodB/Cage3
       - name: Row3/PodB/Cage5
+      - name: Row3/PodB/Cage7
       - name: Row3/PodB/Cage15
       - name: Row3/PodB/Cage17
       - name: Row3/PodB/Cage19
@@ -17,3 +18,23 @@ netbox_racks:
       - name: Row4/PodA/Cage4
       - name: Row4/PodA/Cage21
       - name: Row4/PodA/Cage23
+
+  - site: MGHPCC
+    location: Row1/PodC
+    u_height: 44
+    racks:
+      - name: Row1/PodC/Cage8
+      - name: Row1/PodC/Cage10
+      - name: Row1/PodC/Cage12
+      - name: Row1/PodC/Cage14
+      - name: Row1/PodC/Cage16
+
+  - site: MGHPCC
+    location: Row6/PodB
+    u_height: 44
+    racks:
+      - name: Row6/PodB/Cage2
+      - name: Row6/PodB/Cage4
+      - name: Row6/PodB/Cage6
+      - name: Row6/PodB/Cage8
+      - name: Row6/PodB/Cage10
