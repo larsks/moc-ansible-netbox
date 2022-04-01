@@ -3,3 +3,5 @@ netbox_clusters:
     type: virtualization
   - name: neu_3_30_cluster
     type: virtualization
+  - name: neu_19_10_cluster
+    type: virtualization
