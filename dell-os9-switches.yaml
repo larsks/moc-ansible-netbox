@@ -1,0 +1,97 @@
+- name: "Register Dell Switches running OS9 (FTOS)"
+  hosts: dell_os9
+  tasks:
+
+    - name: "Cacluate and set rack, rack_number and rackpos"
+      include_role:
+        name: calcuate-rack-position
+      vars:
+        ipmi_ip: "{{ ansible_host }}"
+
+    - name: "Get facts"
+      dellemc.os9.os9_facts:
+        gather_subset: all
+
+    - name: "Set some standard facts"
+      set_fact:
+        manufacturer: "Dell Inc."
+        model: "{{ ansible_net_model }}"
+        serial: "{{ ansible_net_serialnum }}"
+        device_name: "{{ ansible_net_hostname }}"
+
+    - name: "Create dictionary mapping bandwidth to interface type"
+      set_fact:
+        bandwidth_map: {
+          '100000': 'QSFP28 (100GE)',
+          '40000': 'QSFP+ (40GE)',
+          '25000': 'SFP28 (25GE)',
+          '10000': 'SFP+ (10GE)',
+        }
+
+    - name: "Create the device_type"
+      ignore_errors: true
+      netbox.netbox.netbox_device_type:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          manufacturer: "{{ manufacturer }}"
+          model: "{{ model }}"
+        state: present
+      delegate_to: 127.0.0.1
+
+    - name: "Register the device in netbox"
+      ignore_errors: true
+      netbox.netbox.netbox_device:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "{{ device_name }} "
+          serial: "{{ serial }}"
+          device_type: "{{ model }}"
+          rack: "{{ rack }}"
+          position: "{{rackpos}}"
+          device_role: data_switch
+          face: front
+          location: "{{ location }}"
+          site: MGHPCC
+        state: present
+      delegate_to: 127.0.0.1
+
+    - name: "Create network interfaces"
+      netbox.netbox.netbox_device_interface:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "{{ item }}"
+          device: "{{ device_name }}"
+          type: "{{ bandwidth_map[interface.bandwidth|string] | default('Other') }}"
+        state: present
+      vars:
+        interface: >-
+          {{ ansible_net_interfaces[item] }}
+      when: '"Vlan" not in item'
+      delegate_to: 127.0.0.1
+      loop: "{{ansible_net_interfaces.keys() | list}}"
+
+    - name: "Create management interface of the switch"
+      netbox.netbox.netbox_device_interface:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          device: "{{ device_name }}"
+          name: management
+          type: 1000Base-t (1GE)
+          mgmt_only: true
+        state: present
+      delegate_to: 127.0.0.1
+
+    - name: "Associate IP address with management interface"
+      netbox.netbox.netbox_ip_address:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          address: "{{ ansible_host }}"
+          assigned_object:
+            name: management
+            device: "{{ device_name }}"
+        state: present
