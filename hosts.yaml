@@ -40,6 +40,11 @@ all:
               ipmi_ip: 10.0.5.30
           vars:
             calculate_rack: true
+        maas:
+          hosts:
+            neu-19-10.maas.massopen.cloud:
+          vars:
+            calculate_rack: true
         production_ceph:
           hosts:
             kzn-mon1:

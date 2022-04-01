@@ -2,16 +2,13 @@
   hosts: servers
   tasks:
 
-    - name: "Install dmidecode and ipmitool"
-      yum:
-        name: "{{ packages }}"
-        state: latest
-        update_cache: true
-      vars:
-        packages:
+    - name: "Install dmidecode, ipmitool and lldpad"
+      package:
+        name:
           - dmidecode
           - ipmitool
           - lldpad
+        state: latest
 
     - name: "Start lldpad service"
       ansible.builtin.systemd:
