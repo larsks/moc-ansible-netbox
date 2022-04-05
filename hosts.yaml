@@ -40,6 +40,11 @@ all:
               ipmi_ip: 10.0.5.30
           vars:
             calculate_rack: true
+        maas:
+          hosts:
+            neu-19-10.maas.massopen.cloud:
+          vars:
+            calculate_rack: true
         production_ceph:
           hosts:
             kzn-mon1:
@@ -428,5 +433,14 @@ all:
             kaizenbm.massopen.cloud:
           vars:
             cluster: "neu_3_30_cluster"
+        neu_19_10_cluster:
+          hosts:
+            bastion.maas.massopen.cloud:
+            rceph.maas.massopen.cloud:
+            mania.hil.massopen.cloud:
+            jon.hil.massopen.cloud:
+            intel.hil.massopen.cloud:
+          vars:
+            cluster: "neu_19_10_cluster"
       vars:
         ansible_user: root
