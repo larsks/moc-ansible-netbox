@@ -1,0 +1,66 @@
+- name: "Register parent chassis devices into netbox"
+  hosts: chassis_devices
+  gather_facts: false
+  tasks:
+
+    - name: "Create the manufacturer"
+      netbox.netbox.netbox_manufacturer:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "{{ manufacturer }}"
+        state: present
+      delegate_to: 127.0.0.1
+
+    - name: "Cacluate and set rack, rack_number and rackpos"
+      include_role:
+        name: calcuate-rack-position
+
+    - name: "Create the device_type"
+      netbox.netbox.netbox_device_type:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          manufacturer: "{{ manufacturer }}"
+          model: "{{ device_type }}"
+          u_height: "{{ height }}"
+          subdevice_role: "parent"
+        state: present
+      delegate_to: 127.0.0.1
+
+    - name: "Create device role"
+      netbox.netbox.netbox_device_role:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "{{ role }}"
+        state: present
+      delegate_to: 127.0.0.1
+
+    - name: "Create the chassis device"
+      netbox.netbox.netbox_device:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "{{ inventory_hostname }} "
+          device_type: "{{ device_type }}"
+          rack: "{{ rack }}"
+          position: "{{rackpos}}"
+          device_role: "{{ role }}"
+          face: front
+          location: "{{ location }}"
+          site: MGHPCC
+        state: present
+      delegate_to: 127.0.0.1
+
+    - name: "Create device bays"
+      netbox.netbox.netbox_device_bay:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          device: "{{ inventory_hostname }}"
+          name: >-
+            Slot {{ item }}
+        state: present
+      loop: "{{ range(1, number_of_bays + 1, 1)|list }}"
+      delegate_to: 127.0.0.1

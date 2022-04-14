@@ -145,9 +145,33 @@ all:
               ansible_host: 172.16.19.12
           vars:
             calculate_rack: true
+        kumo_dell_blades_devices:
+          hosts:
+            bu-23-101:
+              ansible_host: bu-23-101.maas.massopen.cloud
+              parent_device_bay: Slot 1
+          vars:
+            location: Row4/PodA
+            parent_device: kumo_dell_blades
+            rack_number: 23
+            height: 0
       vars:
         ansible_user: root
         location: Row3/PodB
+        calculate_rack: false
+    chassis_devices:
+      hosts:
+        kumo_dell_blades:
+          ansible_host: 10.1.11.5
+          device_type: M1000e
+          number_of_bays: 16
+          location: Row4/PodA
+          height: 8
+          rack_number: 23
+          rackpos: 1
+          manufacturer: Dell Inc.
+          role: misc
+      vars:
         calculate_rack: false
     switches:
       children:
