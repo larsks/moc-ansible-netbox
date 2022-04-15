@@ -1,0 +1,9 @@
+- import_playbook: load-static-data.yaml
+- import_playbook: ipmi-switches.yaml
+- import_playbook: cisco-switches.yaml
+- import_playbook: brocade-switches.yaml
+- import_playbook: mellanox-onyx-switches.yaml
+- import_playbook: dell-os9-switches.yaml
+- import_playbook: chassis-devices.yaml
+- import_playbook: virtual-machine.yaml
+- import_playbook: register-system.yaml
