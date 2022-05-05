@@ -1,0 +1,6 @@
+- name: Register NIC
+  debug:
+    msg: "{{ item.1.name }}: {{ nic }}"
+  loop: "{{ item.1.nics }}"
+  loop_control:
+    loop_var: nic

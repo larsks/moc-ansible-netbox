@@ -1,4 +1,4 @@
-- name: debug
+- name: Register system
   debug:
     msg:
       location: "{{ item.0.location }}"
@@ -6,6 +6,12 @@
       rack: "{{ item.0.rack }}"
       name: "{{ item.1.name }}"
 
+  loop: "{{ netbox_servers|subelements('servers') }}"
+  loop_control:
+    label: "{{ item.1.name }}"
+
+- name: Register NICS
+  include_tasks: register_nics.yaml
   loop: "{{ netbox_servers|subelements('servers') }}"
   loop_control:
     label: "{{ item.1.name }}"
