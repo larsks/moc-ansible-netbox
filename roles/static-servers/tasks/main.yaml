@@ -1,0 +1,11 @@
+- name: debug
+  debug:
+    msg:
+      location: "{{ item.0.location }}"
+      site: "{{ item.0.site }}"
+      rack: "{{ item.0.rack }}"
+      name: "{{ item.1.name }}"
+
+  loop: "{{ netbox_servers|subelements('servers') }}"
+  loop_control:
+    label: "{{ item.1.name }}"
